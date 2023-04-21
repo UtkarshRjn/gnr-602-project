@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image Segmentation</title>
+  <style>
+    .container {
+      width: 50%;
+      height: 400px;
+      border: 1px solid black;
+      float: left;
+      overflow: hidden;
+    }
+    .result-container {
+      width: 50%;
+      height: 400px;
+      border: 1px solid black;
+      float: right;
+      overflow: hidden;
+    }
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h1>GNR 602 Project Presentation</h1>
+  <p>Classify a remote sensed image for land use land cover using Fisher's Linear Discriminant
+    classifier. Compare the output with LDA and PCA based classifiers.</p>
+  <div class="container">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <p>Upload a .mat file:</p>
+      <input type="file" name="matfile">
+      <br><br>
+      <input type="submit" value="Submit">
+    </form>
+    <h2>Uploaded Image:</h2>
+    {% if mat_file %}
+      <!-- <img src="data:image/png;base64,{{ image }}" alt="uploaded image"> -->
+    {% endif %}
+  </div>
+  <div class="result-container">
+    {% if plot_html %}
+      <h2>Segmented Image:</h2>
+      <img src="data:image/png;base64,{{ plot_html }}" alt="segmented image">
+    {% endif %}
+  </div>
+</body>
+</html>
