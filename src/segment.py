@@ -110,7 +110,7 @@ class Segment:
             data_reduced, lda_components = self.lda(
                 data_scaled, labels.ravel(), num_components
             )
-            
+
             # create directory recursively if it doesn't exist
             dir_path = os.path.dirname("../models/" + self.data_name + "/lda_model.pkl")
             if not os.path.exists(dir_path):
@@ -126,18 +126,21 @@ class Segment:
             name="lda_1.png",
             dir="../output/" + self.data_name + "/" + self.dim_red_algo + "/",
             keep_axis=False,
+            isLabel=False,
         )
         save_fig(
             data_reduced[:, 1].reshape(n, m),
             name="lda_2.png",
             dir="../output/" + self.data_name + "/" + self.dim_red_algo + "/",
             keep_axis=False,
+            isLabel=False,
         )
         save_fig(
             data_reduced[:, 2].reshape(n, m),
             name="lda_3.png",
             dir="../output/" + self.data_name + "/" + self.dim_red_algo + "/",
             keep_axis=False,
+            isLabel=False,
         )
 
         num_labels = len(np.unique(labels_reshaped))

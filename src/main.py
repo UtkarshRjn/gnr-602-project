@@ -19,7 +19,7 @@ class ImageSegmentationGUI:
         # Create the image box
         self.image_box = tk.Label(master)
         # self.image_box = tk.Label(master, width=100, height=20)
-        self.image_box.pack()
+        self.image_box.pack(fill="both", expand=True)
 
         # Create the option menu for algorithm selection
         self.algorithm_var = tk.StringVar(master)
@@ -78,11 +78,14 @@ class ImageSegmentationGUI:
 
     # Define functions to update the labels with the accuracy values
     def update_test_accuracy(self, value):
-        self.test_accuracy_label.config(text="Test accuracy: {:.2f}%".format(value*100))
+        self.test_accuracy_label.config(
+            text="Test accuracy: {:.2f}%".format(value * 100)
+        )
 
     def update_pred_accuracy(self, value):
-        self.pred_accuracy_label.config(text="Prediction accuracy: {:.2f}%".format(value*100))
-
+        self.pred_accuracy_label.config(
+            text="Prediction accuracy: {:.2f}%".format(value * 100)
+        )
 
     def browse_image(self):
         # Open a file dialog to select a mat file
@@ -99,6 +102,7 @@ class ImageSegmentationGUI:
                 name=self.data_name + ".png",
                 dir=os.path.dirname(file_path),
                 keep_axis=False,
+                isLabel=False,
             )
 
             self.image = Image.open(img_path)
@@ -106,7 +110,11 @@ class ImageSegmentationGUI:
             self.photo = ImageTk.PhotoImage(self.image)
 
             # Update the image box with the selected image
-            self.image_box.config(image=self.photo)
+            if self.image_box is None:
+                self.image_box = tk.Label(self.master, image=self.photo)
+                self.image_box.pack(fill="both", expand=True)
+            else:
+                self.image_box.configure(image=self.photo)
 
     def browse_labels(self):
 
@@ -132,6 +140,8 @@ class ImageSegmentationGUI:
                 name=self.label_name + ".png",
                 dir=os.path.dirname(file_path),
                 keep_axis=False,
+                isLabel=True,
+                num_labels=np.unique(self.mat_label).size,
             )
 
             self.image = Image.open(img_path)
@@ -139,7 +149,11 @@ class ImageSegmentationGUI:
             self.photo = ImageTk.PhotoImage(self.image)
 
             # Update the image box with the selected image
-            self.image_box.config(image=self.photo)
+            if self.image_box is None:
+                self.image_box = tk.Label(self.master, image=self.photo)
+                self.image_box.pack(fill="both", expand=True)
+            else:
+                self.image_box.configure(image=self.photo)
 
     def segment_image(self, train=False):
         # Get the selected algorithm and classification algorithm
@@ -188,7 +202,13 @@ class ImageSegmentationGUI:
                 + "_"
                 + selected_classification_algorithm.lower()
                 + "_with_gauss.png",
-                dir="../output/" + self.data_name + "/" + selected_algorithm.lower() + "/",
+                dir="../output/"
+                + self.data_name
+                + "/"
+                + selected_algorithm.lower()
+                + "/",
+                isLabel=True,
+                num_labels=np.unique(segmented_image).size,
             )
         else:
             img_path = save_fig(
@@ -197,14 +217,20 @@ class ImageSegmentationGUI:
                 + "_"
                 + selected_classification_algorithm.lower()
                 + "_without_gauss.png",
-                dir="../output/" + self.data_name + "/" + selected_algorithm.lower() + "/",
+                dir="../output/"
+                + self.data_name
+                + "/"
+                + selected_algorithm.lower()
+                + "/",
+                isLabel=True,
+                num_labels=np.unique(segmented_image).size,
             )
 
         self.image = Image.open(img_path)
         self.image = ImageOps.fit(self.image, (500, 500), Image.LANCZOS)
         self.photo = ImageTk.PhotoImage(self.image)
 
-        self.image_box.config(image=self.photo)
+        self.image_box.configure(image=self.photo)
 
 
 if __name__ == "__main__":

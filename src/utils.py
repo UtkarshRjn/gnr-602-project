@@ -20,11 +20,16 @@ class StandardScaler:
         return self.transform(X)
 
 
-def save_fig(img, name, dir="", keep_axis=True):
+def save_fig(img, name, dir="", keep_axis=True, num_labels=0, isLabel=False):
     fig, ax = plt.subplots(figsize=(4, 4), dpi=100)
     ax.imshow(img, interpolation="nearest")
     if not keep_axis:
         ax.set_axis_off()
+
+    if isLabel:
+        plt.get_cmap("Set1", num_labels)
+    else:
+        plt.get_cmap("gray")
 
     if not os.path.exists(dir):
         os.makedirs(dir)
