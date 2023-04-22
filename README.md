@@ -6,7 +6,25 @@ We used two algorithms, Principal Component Analysis (PCA) and Linear  Discrimin
 
 **How to Run:**
 
-<Underway>
+Step 1: Create a python virtual environment
+
+* `python3.10 -m venv py3`
+* `source py3/bin/activate`
+
+Step 2: Install all dependencies
+
+* `pip install -r requirements.txt`
+
+Step 3: Change directory to source directory
+
+* `cd src/`
+
+Step 4: `python3.10 main.py`
+
+* Take `.mat` files as the input with mouse
+* Output images will be saved in the `./output` directory
+* If trained and predicted models will get saved in `./models` directory
+* Jupyter Notebooks are present in notebook folder, it can be executed without 
 
 **Algorithm:**
 
@@ -27,23 +45,27 @@ We used two algorithms, Principal Component Analysis (PCA) and Linear  Discrimin
   * [Sample](./dataset/Indian Pines/indian_pines.png)
   * [Ground Truth](./dataset/Indian Pines/indian_pines_gt.png)
 
-  <Can add more datasets>
+* [Salinas]()
+  
+  * [Sample](./dataset/Salinas/salinas.png)
+  * [Ground Truth](./dataset/Salinas/salinas_gt.png)
+
 
 **Approach:**
 
-<Explained in Introduction try explaining it in report in detail>
+<Explained in report>
 
 ### **Result**s:
 
 * PCA - First 3 principal components
-  * [1st](./output/pca/pca_1.png) , [2nd](./output/pca/pca_2.png), [3rd](./output/pca/pca_3.png)
+  * [1st](./output/indian_pines/pca/pca_1.png) , [2nd](./output/indian_pines/pca/pca_2.png), [3rd](./output/indian_pines/pca/pca_3.png)
 
 * LDA - First 3 components
-  * [1st](./output/lda/lda_1.png) , [2nd](./output/lda/lda_2.png), [3rd](./output/lda/lda_3.png)
+  * [1st](./output/indian_pines/lda/lda_1.png) , [2nd](./output/indian_pines/lda/lda_2.png), [3rd](./output/indian_pines/lda/lda_3.png)
 
 * Predictions:
-  * [PCA](./output/pca)
-  * [LDA](./output/lda)
+  * [PCA](./output/indian_pines/pca)
+  * [LDA](./output/indian_pines/lda)
 
 **Accuracy**:
 
@@ -67,7 +89,7 @@ We cannot compute accuracy for unsupervised approach. We can also segment withou
 
 We cannot compute mse for unsupervised approach. We can also segment without any labels for those segment. Only the classification can be acknowledged
 
-### Note for Presentation
+### Results on other dataset:
 
-* Explain the approach with diagram, try to find images from google which could be used to depict our approach
-* Can merge (keeping them side by side in presentation) few images to get a good diagram.
+Indian Pines: 89.12%
+Salinas: 93.25%

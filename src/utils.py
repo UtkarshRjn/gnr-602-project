@@ -22,14 +22,16 @@ class StandardScaler:
 
 def save_fig(img, name, dir="", keep_axis=True, num_labels=0, isLabel=False):
     fig, ax = plt.subplots(figsize=(4, 4), dpi=100)
+    if isLabel:
+        cmap = plt.get_cmap("Set2", num_labels)
+    else:
+        cmap = plt.get_cmap("gray")
+
     ax.imshow(img, interpolation="nearest")
+    # ax.imshow(img, interpolation="nearest", cmap=cmap)
     if not keep_axis:
         ax.set_axis_off()
 
-    if isLabel:
-        plt.get_cmap("Set1", num_labels)
-    else:
-        plt.get_cmap("gray")
 
     if not os.path.exists(dir):
         os.makedirs(dir)

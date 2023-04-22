@@ -6,6 +6,8 @@ from tensorflow.keras.models import load_model
 from sklearn.model_selection import train_test_split
 from keras.utils import custom_object_scope
 import cv2
+from sklearn.metrics import accuracy_score
+from sklearn.svm import SVC
 from tqdm import tqdm
 import pickle
 import os
@@ -146,43 +148,71 @@ class Segment:
         num_labels = len(np.unique(labels_reshaped))
         labels_onehot = np.eye(num_labels)[labels_reshaped.reshape(-1)]
 
-        # self.model = MyModel(data_reduced.shape[1], num_labels)
-        self.model = Sequential()
-        self.model.add(Dense(64, activation="relu", input_dim=data_reduced.shape[1]))
-        self.model.add(Dense(32, activation="relu"))
-        self.model.add(Dense(num_labels, activation="softmax"))
-        self.model.compile(
-            loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"]
-        )
 
-        X_train, X_test, y_train, y_test = train_test_split(
-            data_reduced, labels_onehot, test_size=0.3, random_state=42
-        )
+        if self.classifier_algo == "ann":
+            # self.model = MyModel(data_reduced.shape[1], num_labels)
+            self.model = Sequential()
+            self.model.add(Dense(64, activation="relu", input_dim=data_reduced.shape[1]))
+            self.model.add(Dense(32, activation="relu"))
+            self.model.add(Dense(num_labels, activation="softmax"))
+            self.model.compile(
+                loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"]
+            )
 
-        # Train the neural network on the training set
-        self.model.fit(
-            X_train,
-            y_train,
-            epochs=num_epochs,
-            batch_size=batch_size,
-            validation_split=validation_split,
-        )
+            X_train, X_test, y_train, y_test = train_test_split(
+                data_reduced, labels_onehot, test_size=0.3, random_state=42
+            )
 
-        # Evaluate the neural network on the test set
-        loss, accuracy = self.model.evaluate(X_test, y_test)
-        print("Test accuracy:", accuracy)
+            # Train the neural network on the training set
+            self.model.fit(
+                X_train,
+                y_train,
+                epochs=num_epochs,
+                batch_size=batch_size,
+                validation_split=validation_split,
+            )
 
-        self.model.save(
-            "../models/"
-            + self.data_name
-            + "/"
-            + self.dim_red_algo
-            + "_"
-            + self.classifier_algo
-            + ".h5"
-        )
+            # Evaluate the neural network on the test set
+            loss, accuracy = self.model.evaluate(X_test, y_test)
+            print("Test accuracy:", accuracy)
 
-        return loss, accuracy
+            self.model.save(
+                "../models/"
+                + self.data_name
+                + "/"
+                + self.dim_red_algo
+                + "_ann"
+                + ".h5"
+            )
+
+        elif self.classifier_algo == "svm":
+            
+            X_train, X_test, y_train, y_test = train_test_split(
+                data_reduced, labels_reshaped, test_size=0.3, random_state=42
+            )
+
+            self.model = SVC(kernel="linear", gamma="auto")
+            self.model.fit(X_train, y_train)
+
+            y_pred = self.model.predict(X_test)
+            accuracy = accuracy_score(y_test, y_pred)
+            print("Test accuracy:", accuracy)
+
+
+            # create directory recursively if it doesn't exist
+            dir_path = os.path.dirname(
+                "../models/" + self.data_name + "/" + self.dim_red_algo + "_svm.pkl"
+            )
+            if not os.path.exists(dir_path):
+                os.makedirs(dir_path)
+
+            with open(
+                "../models/" + self.data_name + "/" + self.dim_red_algo + "_svm.pkl", "wb"
+            ) as f:
+                pickle.dump(self.model, f)
+
+
+        return accuracy
 
     def predict(self, image: np.ndarray, gauss: bool = True, num_components: int = 16):
 
@@ -192,15 +222,28 @@ class Segment:
 
         # with custom_object_scope({'MyModel': MyModel}):
         try:
-            self.model = load_model(
-                "../models/"
-                + self.data_name
-                + "/"
-                + self.dim_red_algo
-                + "_"
-                + self.classifier_algo
-                + ".h5"
-            )
+            
+            if self.classifier_algo == "ann":
+                self.model = load_model(
+                    "../models/"
+                    + self.data_name
+                    + "/"
+                    + self.dim_red_algo
+                    + "_"
+                    + self.classifier_algo
+                    + ".h5"
+                )
+            elif self.classifier_algo == "svm":
+                self.model = pickle.load(
+                    open(
+                        "../models/"
+                        + self.data_name
+                        + "/"
+                        + self.dim_red_algo
+                        + "_svm.pkl",
+                        "rb",
+                    )
+                )
         except:
             return "Please train the model first."
 
@@ -214,13 +257,18 @@ class Segment:
         else:
             return None
 
-        # reduced_image = np.tile(reduced_image, (1, num_components))
-        preds_labels_onehot = self.model.predict(reduced_image)
-        preds = np.reshape(preds_labels_onehot, (n, m, 17))
+        if self.classifier_algo == "ann":        
+            preds_labels_onehot = self.model.predict(reduced_image)
+            preds = np.reshape(preds_labels_onehot, (n, m, 17))
 
-        if gauss:
-            preds = self.gaussian_filter(preds)
+            if gauss:
+                preds = self.gaussian_filter(preds)
 
-        labels = np.argmax(preds, axis=2)
+            labels = np.argmax(preds, axis=2)
+
+        elif self.classifier_algo == "svm":
+            preds = self.model.predict(reduced_image)
+            labels = np.reshape(preds, (n, m))
+
 
         return labels

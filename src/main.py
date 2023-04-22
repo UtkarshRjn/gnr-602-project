@@ -124,13 +124,14 @@ class ImageSegmentationGUI:
             # Load the mat file as a numpy array
             self.label_name = os.path.splitext(os.path.basename(file_path))[0].lower()
 
-            try:
-                assert self.label_name == self.data_name + "_gt"
-            except AssertionError:
-                tk.messagebox.showerror(
-                    "Error", "The label file does not match the image file!"
-                )
-                return
+            if hasattr(self, "data_name"):
+                try:
+                    assert self.label_name == self.data_name + "_gt"
+                except AssertionError:
+                    tk.messagebox.showerror(
+                        "Error", "The label file does not match the image file!"
+                    )
+                    return
 
             self.mat_label = scipy.io.loadmat(file_path)
             self.mat_label = self.mat_label[self.label_name]
@@ -178,7 +179,7 @@ class ImageSegmentationGUI:
         )
 
         if train:
-            _, test_accuracy = segment.fit(
+            test_accuracy = segment.fit(
                 self.mat_data,
                 self.mat_label,
                 num_components=len(np.unique(self.mat_label)) - 1,
