@@ -19,12 +19,17 @@ Step 3: Change directory to source directory
 
 * `cd src/`
 
-Step 4: `python3.10 main.py`
+Step 4: Run main program
 
-* Take `.mat` files as the input with mouse
-* Output images will be saved in the `./output` directory
-* If trained and predicted models will get saved in `./models` directory
-* Jupyter Notebooks are present in notebook folder, it can be executed without 
+* `python3.10 main.py`
+
+  ```markdown
+  -> Take `.mat` files as the input with mouse
+  -> Output images will be saved in the `./output` directory
+  -> If trained and predicted models will get saved in `./models` directory
+  -> You need to train the model first before making any predictions. 
+  -> Jupyter Notebooks are present in notebook folder.
+  ```
 
 **Algorithm:**
 
@@ -40,16 +45,13 @@ Step 4: `python3.10 main.py`
 
 **Dataset:**
 
-* [Indian Pines dataset]()
-
+* [Indian Pines dataset](./dataset/Indian Pines)
   * [Sample](./dataset/Indian Pines/indian_pines.png)
   * [Ground Truth](./dataset/Indian Pines/indian_pines_gt.png)
-
-* [Salinas]()
   
+* [Salinas](./dataset/Salinas)
   * [Sample](./dataset/Salinas/salinas.png)
   * [Ground Truth](./dataset/Salinas/salinas_gt.png)
-
 
 **Approach:**
 
@@ -58,11 +60,11 @@ Step 4: `python3.10 main.py`
 ### **Result**s:
 
 * PCA - First 3 principal components
-  * [1st](./output/indian_pines/pca/pca_1.png) , [2nd](./output/indian_pines/pca/pca_2.png), [3rd](./output/indian_pines/pca/pca_3.png)
-
+  * Indian Pines: [1st](./output/indian_pines/pca/pca_1.png) , [2nd](./output/indian_pines/pca/pca_2.png), [3rd](./output/indian_pines/pca/pca_3.png)
+  * Salinas: [1st](./output/salinas/pca/pca_1.png) , [2nd](./output/salinas/pca/pca_2.png), [3rd](./output/salinas/pca/pca_3.png)
 * LDA - First 3 components
-  * [1st](./output/indian_pines/lda/lda_1.png) , [2nd](./output/indian_pines/lda/lda_2.png), [3rd](./output/indian_pines/lda/lda_3.png)
-
+  * Indian Pines: [1st](./output/indian_pines/lda/lda_1.png) , [2nd](./output/indian_pines/lda/lda_2.png), [3rd](./output/indian_pines/lda/lda_3.png)
+  * Salinas: [1st](./output/salinas/lda/lda_1.png) , [2nd](./output/salinas/lda/lda_2.png), [3rd](./output/salinas/lda/lda_3.png)
 * Predictions:
   * [PCA](./output/indian_pines/pca)
   * [LDA](./output/indian_pines/lda)
@@ -77,17 +79,6 @@ Step 4: `python3.10 main.py`
 | `With Artificial Neural Network (ANN) + Gauss Smoothening` | 74.00%  | 89.12%  |
 
 We cannot compute accuracy for unsupervised approach. We can also segment without any labels for those segment. Only the classification can be acknowledged
-
-**Mean Sqaure Error:**
-
-| MSE                                                        | PCA    | LDA     |
-| ---------------------------------------------------------- | ------ | ------- |
-| `With K-means`                                             | -      | -       |
-| `With SVM classifier`                                      | 32.553 | 23.3199 |
-| `With Artificial Neural Network (ANN)`                     | 28.419 | 17.4061 |
-| `With Artificial Neural Network (ANN) + Gauss Smoothening` | 28.595 | 17.0469 |
-
-We cannot compute mse for unsupervised approach. We can also segment without any labels for those segment. Only the classification can be acknowledged
 
 ### Results on other dataset:
 

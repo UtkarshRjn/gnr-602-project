@@ -125,21 +125,21 @@ class Segment:
 
         save_fig(
             data_reduced[:, 0].reshape(n, m),
-            name="lda_1.png",
+            name= self.dim_red_algo + "_1.png",
             dir="../output/" + self.data_name + "/" + self.dim_red_algo + "/",
             keep_axis=False,
             isLabel=False,
         )
         save_fig(
             data_reduced[:, 1].reshape(n, m),
-            name="lda_2.png",
+            name= self.dim_red_algo + "_2.png",
             dir="../output/" + self.data_name + "/" + self.dim_red_algo + "/",
             keep_axis=False,
             isLabel=False,
         )
         save_fig(
             data_reduced[:, 2].reshape(n, m),
-            name="lda_3.png",
+            name= self.dim_red_algo + "_3.png",
             dir="../output/" + self.data_name + "/" + self.dim_red_algo + "/",
             keep_axis=False,
             isLabel=False,

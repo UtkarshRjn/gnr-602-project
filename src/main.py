@@ -166,12 +166,20 @@ class ImageSegmentationGUI:
         if train and not hasattr(self, "mat_label"):
             tk.messagebox.showerror("Error", "Please select a label file first!")
             return
+        
 
         selected_algorithm = self.algorithm_var.get()
         selected_classification_algorithm = self.classification_algorithm_var.get()
 
         # Get the value of the gauss checkbox
         gauss = self.gauss_var.get()
+
+        if selected_classification_algorithm == "SVM" and gauss == True:
+            tk.messagebox.showerror(
+                "Error",
+                "Gaussian smoothing is not supported for SVM classification algorithm!",
+            )
+            return
 
         # Call the segmentation function with the selected algorithm
         segment = Segment(
