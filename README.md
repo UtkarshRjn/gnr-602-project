@@ -19,7 +19,9 @@ Step 3: Change directory to source directory
 
 * `cd src/`
 
-Step 4: Run main program
+Step 4:  Add [Indian Pines](https://www.ehu.eus/ccwintco/index.php/Hyperspectral_Remote_Sensing_Scenes) and [Salinas](https://www.ehu.eus/ccwintco/index.php/Hyperspectral_Remote_Sensing_Scenes) data in the dataset folder.
+
+Step 5: Run main program
 
 * `python3.10 main.py`
 
@@ -52,10 +54,6 @@ Step 4: Run main program
 * [Salinas](./dataset/Salinas)
   * [Sample](./dataset/Salinas/salinas.png)
   * [Ground Truth](./dataset/Salinas/salinas_gt.png)
-
-**Approach:**
-
-<Explained in report>
 
 ### **Result**s:
 
